@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Metrics;
+using System.Runtime.ConstrainedExecution;
 using System.Text.RegularExpressions;
 
 namespace SupplyStacks
@@ -15,7 +16,7 @@ namespace SupplyStacks
             
 
             var ListOfCrates = new Dictionary<int, string>();
-            var listOfCrates = new Dictionary<int, List<char>>();
+            var listOfCrates = new Dictionary<int, List<string>>();
             int numOfPos = 0;
 
             List<string> moveList = new List<string>();
@@ -26,26 +27,43 @@ namespace SupplyStacks
             var rx = new Regex(@"\[[a-zA-Z]]", RegexOptions.Compiled);
             var rxx = new Regex(@"\s[^1-9]", RegexOptions.Compiled);
 
-            int totalNumOfLists = (lines[0].Count() - 3) / 4;
-           
+            int totalNumOfColumns = (lines[2].Count() - 3) / 4 + 1;
+
+            
+
+
 
 
             foreach (string line in lines)
             {
-                Console.WriteLine(line);
                              
                 for (int i = 0; i < line.Length; i = i + 4)
                 {
                     
                     if (rx.IsMatch(line.Substring(i, 3)) || rxx.IsMatch(line.Substring(i, 3)))
                     {
-                        ListOfCrates.Add(numOfPos, line.Substring(i+1, 1));
-                        Console.WriteLine(line.Substring(i+1, 1));
-                        numOfPos++;
-                        counter++;
-                        //Console.WriteLine(numOfPos);
+
+                        if (listOfCrates.ContainsKey(numOfPos))
+                        {
+                            listOfCrates[numOfPos].Add(line.Substring(i + 1, 1));
+                        }
+                        else
+                        {
+                            listOfCrates.Add(numOfPos, new List<string>());
+                            listOfCrates[numOfPos].Add(line.Substring(i + 1, 1));
+                        }
                         
-                 
+                        if (counter == totalNumOfColumns - 1)
+                        {
+                            counter = 0;
+                            numOfPos = 0;
+                        }
+                        else
+                        {
+                            counter++;
+                            numOfPos++;
+                        }
+                        
                     }
                     else
                     {
@@ -67,7 +85,7 @@ namespace SupplyStacks
 
             }
             //ListOfCrates.Remove(ListOfCrates.Keys.Last());
-            Console.WriteLine("Length of dictionary:{0}", ListOfCrates[0]);
+            Console.WriteLine("Length of dictionary:{0}", listOfCrates.Count);
 
         }
     }
