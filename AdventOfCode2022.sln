@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RucksackReorganisation", "R
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CampCleanUp", "CampCleanUp\CampCleanUp.csproj", "{7E11275C-3755-47D8-AF66-12050B8C8B56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupplyStacks", "SupplyStacks\SupplyStacks.csproj", "{781FF420-E0FB-409A-AB45-5CF2C4169C8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SupplyStacks", "SupplyStacks\SupplyStacks.csproj", "{781FF420-E0FB-409A-AB45-5CF2C4169C8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TuningTrouble", "TuningTrouble\TuningTrouble.csproj", "{5CF40126-2969-405C-823A-46F0538D2247}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{781FF420-E0FB-409A-AB45-5CF2C4169C8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{781FF420-E0FB-409A-AB45-5CF2C4169C8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{781FF420-E0FB-409A-AB45-5CF2C4169C8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CF40126-2969-405C-823A-46F0538D2247}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CF40126-2969-405C-823A-46F0538D2247}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CF40126-2969-405C-823A-46F0538D2247}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CF40126-2969-405C-823A-46F0538D2247}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

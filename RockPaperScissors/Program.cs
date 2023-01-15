@@ -4,13 +4,13 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 
-namespace CalorieCounting
+namespace RockPaperScissors
 {
     public class Program
     {
         static void Main(string[] args)
         {
-            string[] lines = System.IO.File.ReadAllLines(@"C:\Users\valer\source\repos\AdventOfCode2022\RockPaperScissors\input.txt");
+            string[] lines = File.ReadAllLines(@"C:\Users\valer\source\repos\AdventOfCode2022\RockPaperScissors\input.txt");
 
             List<string> resultsPlayer1 = new List<string>();
             List<string> resultsPlayer2 = new List<string>();
@@ -21,7 +21,7 @@ namespace CalorieCounting
             const int R = 1;
             const int P = 2;
             const int S = 3;
-            
+
             char player1;
             char player2;
 
@@ -31,15 +31,15 @@ namespace CalorieCounting
                 {
                     results.Add(item);
                 }
-               
+
             }
 
-            for (int i = 0; i < results.Count(); i = i+2)
+            for (int i = 0; i < results.Count(); i = i + 2)
             {
                 resultsPlayer1.Add(results[i]);
             }
 
-            for (int i = 1; i < results.Count(); i = i+2)
+            for (int i = 1; i < results.Count(); i = i + 2)
             {
                 resultsPlayer2.Add(results[i]);
             }
@@ -106,10 +106,10 @@ namespace CalorieCounting
                 }
             }
 
-                
-                
-                //Console.WriteLine(counter);
-            
+
+
+            //Console.WriteLine(counter);
+
 
             Console.WriteLine(finalScore);
         }
