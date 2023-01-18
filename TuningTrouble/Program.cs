@@ -11,7 +11,7 @@ namespace TuningTrouble
         static void Main(string[] args)
         {
             string line = readFromTheFile("TuningTrouble");
-            int markerLength = 4;
+            int markerLength = 14;
 
             Console.WriteLine(findUniqueSequence(markerLength, line));
 
@@ -27,7 +27,7 @@ namespace TuningTrouble
             int numCount = markerLength; 
             for (int i = 0; i < line.Count(); i++)
             {
-                string diffSequence = line.Substring(i, 4);
+                string diffSequence = line.Substring(i, markerLength);
 
                 if (diffSequence.Distinct().Count() == markerLength)
                 {
