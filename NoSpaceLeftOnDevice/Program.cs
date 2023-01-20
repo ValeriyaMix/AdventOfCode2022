@@ -19,7 +19,7 @@ namespace NoSpaceLeftOnDevice
             List<string> sequenceList = new List<string>();
 
             string currentFolderName = "";
-            int positionOfCurrentFolder = 1;
+            int positionOfCurrentFolder = 0;
 
             string folderToAdd = "";
             int sum = 0;
@@ -27,7 +27,7 @@ namespace NoSpaceLeftOnDevice
 
 
             var dictOfPositions = new Dictionary<int, string>();
-            var dictOfSums = new Dictionary<string, int>();
+            var dictOfSums = new Dictionary<string, List<string>>();
             var dictOfFolders = new Dictionary<string, List<string>>();
 
 
@@ -38,27 +38,35 @@ namespace NoSpaceLeftOnDevice
                 {
                     if (line[i] == "$ cd ..")
                     {
-                        currentFolderName = dictOfPositions[positionOfCurrentFolder - 1];
-                        positionOfCurrentFolder--;
+                        positionOfCurrentFolder = positionOfCurrentFolder - 1;
+                        currentFolderName = dictOfPositions[positionOfCurrentFolder];
+                        
                     }
                     else
                     {
-                        currentFolderName = line[i].Trim(charsToTrim);
-                        dictOfPositions[positionOfCurrentFolder] = currentFolderName;
+                        currentFolderName = line[i].Split(" ")[2];
                         positionOfCurrentFolder++;
+                        dictOfPositions[positionOfCurrentFolder] = currentFolderName;
+                        isItInDict(dictOfFolders, currentFolderName);
+                        
                     }
-                    Console.WriteLine(currentFolderName);
+                    //Console.WriteLine($"current folder name{currentFolderName}");
+                    //foreach (var item in dictOfPositions)
+                    //{
+                    //    Console.WriteLine(item);
+                    //}
                 }
                 else if (line[i].Contains("dir"))
                 {
-                    folderToAdd = line[i].Trim(charsToTrim);
-                    isItInDict(dictOfFolders, folderToAdd);
+                    folderToAdd = line[i].Split(" ")[1];
+                    dictOfFolders[currentFolderName].Add(folderToAdd);
                 }
                 else if (line[i].Any(char.IsDigit))
                 {
-                    string[] dig = line[i].Split();
-                    sum = sum + Convert.ToInt32(dig[0]);
-                    dictOfSums[currentFolderName] = sum;
+                    string dig = line[i].Split()[0];
+                    
+                    isItInDict(dictOfSums, currentFolderName);
+                    dictOfSums[currentFolderName].Add(dig);
                 }
                 else
                 {
@@ -66,6 +74,9 @@ namespace NoSpaceLeftOnDevice
                 }
 
             }
+
+
+            
 
             Console.WriteLine(sum);
         }
