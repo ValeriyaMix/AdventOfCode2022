@@ -34,12 +34,13 @@ namespace NoSpaceLeftOnDevice
 
             for (int i = 0; i < line.Length; i++)
             {
-                if (line[i].Contains("cd"))
+                if (line[i].Substring(0, 4) == "$ cd")
                 {
                     if (line[i] == "$ cd ..")
                     {
                         positionOfCurrentFolder = positionOfCurrentFolder - 1;
                         currentFolderName = dictOfPositions[positionOfCurrentFolder];
+                        
                         
                     }
                     else
@@ -50,35 +51,45 @@ namespace NoSpaceLeftOnDevice
                         isItInDict(dictOfFolders, currentFolderName);
                         
                     }
-                    //Console.WriteLine($"current folder name{currentFolderName}");
-                    //foreach (var item in dictOfPositions)
-                    //{
-                    //    Console.WriteLine(item);
-                    //}
+                    
+                    //Console.WriteLine($"Currentfolder name: {currentFolderName}");
+                    //Console.WriteLine( "\n");
                 }
-                else if (line[i].Contains("dir"))
+                else if (line[i].Substring(0, 3) == "dir")
                 {
                     folderToAdd = line[i].Split(" ")[1];
                     dictOfFolders[currentFolderName].Add(folderToAdd);
+                    //Console.WriteLine($"Folder that was added {folderToAdd}");
                 }
                 else if (line[i].Any(char.IsDigit))
                 {
                     string dig = line[i].Split()[0];
                     
                     isItInDict(dictOfSums, currentFolderName);
+                    isItInDict(dictOfFolders, currentFolderName, dig);
                     dictOfSums[currentFolderName].Add(dig);
+                    //Console.WriteLine($"Sum that was added {dig} to the folder {currentFolderName}");
                 }
                 else
                 {
 
                 }
+                //Console.WriteLine("\n");
 
             }
 
 
-            
 
-            Console.WriteLine(sum);
+
+            foreach (var item in dictOfFolders)
+            {
+                Console.WriteLine($"External folder {item.Key}:");
+                foreach(var val in item.Value)
+                {
+                    Console.WriteLine($"Values of the folder {item.Key} are: {val}");
+                }
+                Console.WriteLine("\n");
+            }
         }
         public static string[] readFromTheFile(string folderName)
         {
@@ -100,6 +111,19 @@ namespace NoSpaceLeftOnDevice
             }
         }
 
+        public static void isItInDict(Dictionary<string, List<string>> structure, string folderName, string value)
+        {
+            if (structure.ContainsKey(folderName))
+            {
+                structure[folderName].Add(value);
+
+            }
+            else
+            {
+                structure.Add(folderName, new List<string>());
+                structure[folderName].Add(value);
+            }
+        }
 
 
         public static int findUniqueSequence(int markerLength, string line)
