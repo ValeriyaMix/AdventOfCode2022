@@ -54,8 +54,10 @@ namespace NoSpaceLeftOnDevice
                                 {
                                     positionOfParentFolder = positionOfParentFolder - 1;
                                     parentFolderName = listOfParents[positionOfParentFolder];
-                                    currentFolderName = parentFolderName;
+                                    //currentFolderName = listOfParents[positionOfParentFolder + 1];
+                                    //currentFolderName = listOfParents[positionOfParentFolder]; //for current folder name fin
                                 }
+                                currentFolderName = parentFolderName;
                             }
                             
                             
@@ -134,16 +136,17 @@ namespace NoSpaceLeftOnDevice
 
 
             // Iterating through list of folders
-            //foreach (var item in dictOfFolders)
-            //{
-            //    Console.WriteLine($"External folder {item.Key}:");
-            //    foreach (var val in item.Value)
-            //    {
+            Console.WriteLine("\n");
+            foreach (var item in dictOfFolders)
+            {
+                Console.WriteLine($"External folder {item.Key}:");
+                foreach (var val in item.Value)
+                {
 
-            //        Console.WriteLine($"Values of the folder {item.Key} are: {val}");
-            //    }
-            //    Console.WriteLine("\n");
-            //}
+                    Console.WriteLine($"Values of the folder {item.Key} are: {val}");
+                }
+                Console.WriteLine("\n");
+            }
 
 
         }
