@@ -24,7 +24,7 @@ namespace NoSpaceLeftOnDevice
 
 
             var dictOfPositions = new Dictionary<int, string>();
-            var dictOfSums = new Dictionary<string, List<string>>();
+            var dictOfSums = new Dictionary<string, List<int>>();
             var dictOfFolders = new Dictionary<string, List<string>>();
 
             List<string> listOfParents = new List<string>();
@@ -32,6 +32,12 @@ namespace NoSpaceLeftOnDevice
 
             currentFolderName = line[0].Split(" ")[2];
             parentFolderName = line[0].Split(" ")[2];
+
+            int sumOfFiles = 0;
+
+
+            var lineWithNumbers = new Regex(@"[1-9]", RegexOptions.Compiled);
+
 
             for (int i = 1; i < line.Length; i++)
             {
@@ -54,8 +60,6 @@ namespace NoSpaceLeftOnDevice
                                 {
                                     positionOfParentFolder = positionOfParentFolder - 1;
                                     parentFolderName = listOfParents[positionOfParentFolder];
-                                    //currentFolderName = listOfParents[positionOfParentFolder + 1];
-                                    //currentFolderName = listOfParents[positionOfParentFolder]; //for current folder name fin
                                 }
                                 currentFolderName = parentFolderName;
                             }
@@ -63,28 +67,28 @@ namespace NoSpaceLeftOnDevice
                             
                         }
                         
-                        Console.WriteLine("Step back Parent folder {0}", parentFolderName);
-                        Console.WriteLine("Step back Current folder {0}", currentFolderName);
-                        Console.WriteLine(positionOfParentFolder);   
+                        //Console.WriteLine("Step back Parent folder {0}", parentFolderName);
+                        //Console.WriteLine("Step back Current folder {0}", currentFolderName);
+                        //Console.WriteLine(positionOfParentFolder);   
                     }
                     else
                     {
                         parentFolderName = currentFolderName;
                         currentFolderName = line[i].Split(" ")[2];
 
-                        Console.WriteLine("Step forward Parent folder {0}", parentFolderName);
-                        Console.WriteLine("Step forward Current folder {0}", currentFolderName);
+                        //Console.WriteLine("Step forward Parent folder {0}", parentFolderName);
+                        //Console.WriteLine("Step forward Current folder {0}", currentFolderName);
                         
 
-                        if (dictOfFolders[parentFolderName].Contains(currentFolderName))
-                        {
-                            Console.WriteLine($"Folder {currentFolderName} is in the folder {parentFolderName}");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"Folder {currentFolderName} is not in the folder {parentFolderName}");
-                        }
-                        Console.WriteLine("\n");
+                        //if (dictOfFolders[parentFolderName].Contains(currentFolderName))
+                        //{
+                        //    Console.WriteLine($"Folder {currentFolderName} is in the folder {parentFolderName}");
+                        //}
+                        //else
+                        //{
+                        //    Console.WriteLine($"Folder {currentFolderName} is not in the folder {parentFolderName}");
+                        //}
+                        //Console.WriteLine("\n");
 
                     }
 
@@ -98,11 +102,10 @@ namespace NoSpaceLeftOnDevice
                     }
                     else
                     {
-                        dictOfFolders[parentFolderName].Add(folderToAdd);
+                        //dictOfFolders[parentFolderName].Add(folderToAdd);
                         dictOfFolders[currentFolderName].Add(folderToAdd);
                     }
-                   
-                    //Console.WriteLine($"Folder that was added {folderToAdd}");
+
                 }
                 else if (line[i].Any(char.IsDigit))
                 {
@@ -113,7 +116,7 @@ namespace NoSpaceLeftOnDevice
                     }
                     else
                     {
-                        dictOfFolders[parentFolderName].Add(dig);
+                        //dictOfFolders[parentFolderName].Add(dig);
                         dictOfFolders[currentFolderName].Add(dig);
                     }
                 }
@@ -136,19 +139,44 @@ namespace NoSpaceLeftOnDevice
 
 
             // Iterating through list of folders
-            Console.WriteLine("\n");
+
             foreach (var item in dictOfFolders)
             {
-                Console.WriteLine($"External folder {item.Key}:");
+                sumOfFiles = 0;
+                isItInDict(dictOfSums, item.Key);
+
                 foreach (var val in item.Value)
                 {
+                    if (lineWithNumbers.IsMatch(val))
+                    {
+                        sumOfFiles = sumOfFiles + Convert.ToInt32(val);
+                    }
+                    else
+                    {
+                        sumOfFiles = sumOfFiles + findSumOfNestedFilesAndFolders(dictOfFolders, val, lineWithNumbers, sumOfFiles);
+                    }
+                    dictOfSums[item.Key].Add(sumOfFiles);
 
-                    Console.WriteLine($"Values of the folder {item.Key} are: {val}");
                 }
-                Console.WriteLine("\n");
             }
 
 
+        }
+        public static int findSumOfNestedFilesAndFolders(Dictionary<string, List<string>> dictOfFolders, 
+                                                         string valueToCheck, Regex regExExpr, int sumOfFiles)
+        {
+            foreach (var fileOrFolder in dictOfFolders[valueToCheck])
+            {
+                if (regExExpr.IsMatch(fileOrFolder))
+                {
+                    sumOfFiles = sumOfFiles + Convert.ToInt32(fileOrFolder);
+                }
+                else
+                {
+                    findSumOfNestedFilesAndFolders(dictOfFolders, fileOrFolder, regExExpr, sumOfFiles);
+                }
+            }
+            return sumOfFiles;
         }
         public static string[] readFromTheFile(string folderName)
         {
@@ -171,17 +199,11 @@ namespace NoSpaceLeftOnDevice
             }
         }
 
-        public static void isItInDict(Dictionary<string, List<string>> structure, string folderName, string value)
+        public static void isItInDict(Dictionary<string, List<int>> structure, string folderName)
         {
-            if (structure.ContainsKey(folderName))
+            if (!structure.ContainsKey(folderName))
             {
-                structure[folderName].Add(value);
-
-            }
-            else
-            {
-                structure.Add(folderName, new List<string>());
-                structure[folderName].Add(value);
+                structure.Add(folderName, new List<int>());
             }
         }
 
