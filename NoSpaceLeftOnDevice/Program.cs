@@ -24,7 +24,7 @@ namespace NoSpaceLeftOnDevice
 
 
             var dictOfPositions = new Dictionary<int, string>();
-            var dictOfSums = new Dictionary<string, List<int>>();
+            var dictOfSums = new Dictionary<string, int>();
             var dictOfFolders = new Dictionary<string, List<string>>();
 
             List<string> listOfParents = new List<string>();
@@ -140,25 +140,47 @@ namespace NoSpaceLeftOnDevice
 
             // Iterating through list of folders
 
-            foreach (var item in dictOfFolders)
+            for (int i = dictOfFolders.Count() - 1; i > 0; i--)
             {
                 sumOfFiles = 0;
-                isItInDict(dictOfSums, item.Key);
-
-                foreach (var val in item.Value)
+                var item = dictOfFolders.ElementAt(i);
+                var itemKey = item.Key;
+                isItInDict(dictOfSums, itemKey);
+                var itemValue = item.Value;
+                foreach(var fi in item.Value)
                 {
-                    if (lineWithNumbers.IsMatch(val))
+                    if (lineWithNumbers.IsMatch(fi))
                     {
-                        sumOfFiles = sumOfFiles + Convert.ToInt32(val);
+                        sumOfFiles = sumOfFiles + Convert.ToInt32(fi);
                     }
                     else
                     {
-                        sumOfFiles = sumOfFiles + findSumOfNestedFilesAndFolders(dictOfFolders, val, lineWithNumbers, sumOfFiles);
+                        //Console.WriteLine($"{fi} is a folder");
+                        if (dictOfSums.ContainsKey(fi))
+                        {
+                            sumOfFiles = sumOfFiles + dictOfSums[fi];
+                        }
                     }
-                    dictOfSums[item.Key].Add(sumOfFiles);
-
+                    
                 }
+                //Console.WriteLine($"Sum of the folder: {itemKey} files is {sumOfFiles}");
+                dictOfSums[itemKey] = sumOfFiles;
+
             }
+
+            sumOfFiles = 0;
+            foreach (var val in dictOfSums)
+            {
+                
+                if (val.Value <= 100000)
+                {
+                    sumOfFiles = sumOfFiles + val.Value;
+                }
+                Console.WriteLine($"Sum of the folder {val.Key} = {val.Value}");
+
+            }
+            Console.WriteLine('\n');
+            Console.WriteLine(sumOfFiles);
 
 
         }
@@ -180,7 +202,7 @@ namespace NoSpaceLeftOnDevice
         }
         public static string[] readFromTheFile(string folderName)
         {
-            return System.IO.File.ReadAllLines($@"C:\Users\valer\source\repos\AdventOfCode2022\{folderName}\input1.txt");
+            return System.IO.File.ReadAllLines($@"C:\Users\valer\source\repos\AdventOfCode2022\{folderName}\input.txt");
 
         }
 
@@ -199,11 +221,11 @@ namespace NoSpaceLeftOnDevice
             }
         }
 
-        public static void isItInDict(Dictionary<string, List<int>> structure, string folderName)
+        public static void isItInDict(Dictionary<string, int> structure, string folderName)
         {
             if (!structure.ContainsKey(folderName))
             {
-                structure.Add(folderName, new List<int>());
+                structure.Add(folderName, new int());
             }
         }
 
